@@ -10,7 +10,7 @@
         <option>1.5</option>
         <option>2</option>
         <option>2.5</option>
-        <option>3.0</option>
+        <option selected>3.0</option>
         <option>3.5</option>
         <option>4</option>
         <option>4.5</option>
