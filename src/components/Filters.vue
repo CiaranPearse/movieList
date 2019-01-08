@@ -7,8 +7,6 @@
         {{ genre.name }} {{ genre.id }}
       </label>
     </div>
-    <br />
-    <span>Checked names: {{ this.selectedFilters }}</span>
   </div>
 </template>
 
@@ -21,7 +19,8 @@ export default {
       defaultGenres: [],
       selectedGenres: [],
       ratingMin: 0,
-      ratingMax: 10
+      ratingMax: 10,
+      lowestRating: 3
     }
   },
   mounted () {

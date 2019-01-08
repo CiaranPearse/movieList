@@ -4,14 +4,16 @@
       <h3>Loading</h3>
     </div>
     <div v-else>
+      <Rating :filters="this.getAvailableFilters"  @clicked="changeRating" />
       <Filters :filters="this.getAvailableFilters"  @clicked="reFilter" />
-      <Movies :results="this.showMovies"/>
+      <Movies :results="this.showFilteredMovies" :rating="this.rating" />
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import Rating from '@/components/Rating.vue'
 import Filters from '@/components/Filters.vue'
 import Movies from '@/components/Movies.vue'
 import axios from 'axios'
@@ -33,6 +35,7 @@ export default {
     }
   },
   components: {
+    Rating,
     Filters,
     Movies
   },
@@ -77,6 +80,9 @@ export default {
       var theResult = movies.filter(x => x.genre_ids.some(g => value.includes(g)))
       this.showMovies = theResult
       return theResult
+    },
+    changeRating: function (value) {
+      this.rating = value
     }
   },
   computed: {
@@ -90,8 +96,8 @@ export default {
       }
       return allFilters
     },
-    showFilteredMovies: function () {
-    	this.$set(this.this.showMovies)
+    showFilteredMovies () {
+      return this.showMovies
     }
   }
 }
