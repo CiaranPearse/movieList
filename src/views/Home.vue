@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-  	<div v-if="loading === true">
-  		<h3>Loading</h3>
-  	</div>
-  	<div v-else>
-      <Filters :filters="this.getAvailableFilters" />
-      <Movies :results="this.allMovies"/>
+    <div v-if="loading === true">
+      <h3>Loading</h3>
+    </div>
+    <div v-else>
+      <Filters :filters="this.getAvailableFilters"  @clicked="reFilter" />
+      <Movies :results="this.showMovies"/>
     </div>
   </div>
 </template>
@@ -20,13 +20,16 @@ export default {
   name: 'home',
   data () {
     return {
-    	apiKey: 'e3108a98b5d30b80374472848ffe7f10',
+      apiKey: 'e3108a98b5d30b80374472848ffe7f10',
       loading: true,
       error: false,
       errorText: 'Opps! Something went wrong.',
       allMovies: [],
+      showMovies: [],
       allGenres: [],
-      currentMoviesGenres: []
+      currentMoviesGenres: [],
+      selectedGenres: [],
+      rating: 3
     }
   },
   components: {
@@ -34,8 +37,8 @@ export default {
     Movies
   },
   mounted () {
-  	this.getGenres()
-  	this.getMovies()
+    this.getGenres()
+    this.getMovies()
   },
   methods: {
     getGenres () {
@@ -54,28 +57,30 @@ export default {
         .get(CORS_PROXY + moviePath + this.apiKey)
         .then(response => {
           this.allMovies = response.data.results
-          for (let thisMovie of response.data.results) {
-            for (let currentGenre of thisMovie.genre_ids) {
-              if (this.currentMoviesGenres.indexOf(currentGenre) === -1) {
-                this.currentMoviesGenres.push(currentGenre)
-              }
-            }
-          }
+          this.showMovies = response.data.results
+          this.getIntiialMovies()
           this.loading = false
         })
     },
-    populateMovies (value) {
-      for (let thisMovie of value) {
+    getIntiialMovies () {
+      for (let thisMovie of this.allMovies) {
         for (let currentGenre of thisMovie.genre_ids) {
           if (this.currentMoviesGenres.indexOf(currentGenre) === -1) {
             this.currentMoviesGenres.push(currentGenre)
           }
         }
       }
+    },
+    reFilter: function (value) {
+      let movies = this.allMovies
+      this.selectedGenres = value
+      var theResult = movies.filter(x => x.genre_ids.some(g => value.includes(g)))
+      this.showMovies = theResult
+      return theResult
     }
   },
   computed: {
-  	getAvailableFilters: function () {
+    getAvailableFilters: function () {
       let findFilterNames = this.currentMoviesGenres
       let allTheGenres = this.allGenres
       let allFilters = []
@@ -84,6 +89,9 @@ export default {
         allFilters.push({ id: findFilterNames[i], name: tester.name, checked: true })
       }
       return allFilters
+    },
+    showFilteredMovies: function () {
+    	this.$set(this.this.showMovies)
     }
   }
 }

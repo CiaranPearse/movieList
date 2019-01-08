@@ -1,6 +1,6 @@
 <template>
   <div class="results">
-    <div class="grid-item" v-for="(movie, index) in showMovies" :key="index">
+    <div class="grid-item" v-for="(movie, index) in results" :key="index">
       <div class="movie">
         <div class="image">
           <img :src="`http://image.tmdb.org/t/p/w185${movie.poster_path}`">
@@ -36,7 +36,7 @@ export default {
 <style scoped lang="scss">
 .results {
   .grid-item {
-  	border: 1px solid gainsboro;
+    border: 1px solid gainsboro;
     width: 22%;
     display: inline-block;
     margin: 4px;
@@ -50,8 +50,8 @@ export default {
 
         }
         .genre {
-        	display: inline-block;
-        	padding: 4px;
+          display: inline-block;
+          padding: 4px;
         }
       }
     }
