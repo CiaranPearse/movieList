@@ -1,30 +1,30 @@
 <template>
-  <div class="results">
-    <!-- ADD V FOR HERE -->
-    <div class="form-select">
+  <div class="ratings">
+    <div class="rating">
+      Choose Min. Rating: 
       <select v-model="lowestRating"  v-on:change="changeRating">
-        <option disabled value="">Please select one</option>
-        <option>0</option>
-        <option>0.5</option>
-        <option>1.0</option>
-        <option>1.5</option>
-        <option>2</option>
-        <option>2.5</option>
-        <option selected>3.0</option>
-        <option>3.5</option>
-        <option>4</option>
-        <option>4.5</option>
-        <option>5.0</option>
-        <option>5.5</option>
-        <option>6</option>
-        <option>6.5</option>
-        <option>7.0</option>
-        <option>7.5</option>
-        <option>8</option>
-        <option>8.5</option>
-        <option>9.0</option>
-        <option>9.5</option>
-        <option>10</option>
+        <option value="">Please select one</option>
+        <option value="0">0</option>
+        <option value="0.5">0.5</option>
+        <option value="1">1</option>
+        <option value="1.5">1.5</option>
+        <option value="2">2</option>
+        <option value="2.5">2.5</option>
+        <option value="3" selected>3</option>
+        <option value="3.5">3.5</option>
+        <option value="4">4</option>
+        <option value="4.5">4.5</option>
+        <option value="5">5</option>
+        <option value="5.5">5.5</option>
+        <option value="6">6</option>
+        <option value="6.5">6.5</option>
+        <option value="7">7</option>
+        <option value="7.5">7.5</option>
+        <option value="8">8</option>
+        <option value="8.5">8.5</option>
+        <option value="9">9</option>
+        <option value="9.5">9.5</option>
+        <option value="10">10</option>
       </select>
     </div>
   </div>
@@ -39,8 +39,6 @@ export default {
       lowestRating: 3
     }
   },
-  methods: {
-  },
   computed: {
     changeRating: function () {
       var pointNum = parseFloat(this.lowestRating);
@@ -52,10 +50,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.form-check {
-  display: inline-block;
-  width: 200px;
-  margin: 4px;
-  border: 1px solid gainsboro;
-}
+
 </style>

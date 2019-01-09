@@ -15,12 +15,17 @@
       <h3>Loading</h3>
     </div>
     <div v-else>
-      <Rating :filters="this.getAvailableFilters"  @ratingChanged="changeRating" />
-      <Filters :filters="this.getAvailableFilters"  @clicked="reFilter" />
-      <div v-if="error" class="showError">
+    	<div v-if="error" class="showError">
         <p>{{ this.errorText }}</p>
       </div>
-      <Movies :results="this.showFilteredMovies" :rating="this.rating" />
+      <div v-else>
+    	  <div v-if="movieError" class="showError">
+          <p>{{ this.movieErrorText }}</p>
+        </div>
+        <Rating :filters="this.getAvailableFilters"  @ratingChanged="changeRating" />
+        <Filters :filters="this.getAvailableFilters"  @clicked="reFilter" />
+        <Movies :results="this.showFilteredMovies" :rating="this.rating" :allGenres="this.allGenres" />
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +44,9 @@ export default {
       apiKey: 'e3108a98b5d30b80374472848ffe7f10',
       loading: true,
       error: false,
+      movieError: false,
       errorText: 'Opps! Something went wrong.',
+      movieErrorText: 'Opps! Something went wrong.',
       allMovies: [],
       showMovies: [],
       allGenres: [],
@@ -66,6 +73,11 @@ export default {
         .then(response => {
           this.allGenres = response.data.genres
         })
+        .catch(error => {
+        	this.loading = false
+          this.error = true
+          this.errorText = error.response.data.status_message
+        })
     },
     getMovies () {
       const moviePath = 'https://api.themoviedb.org/3/movie/now_playing?api_key='
@@ -78,6 +90,11 @@ export default {
           this.getIntiialMovies()
           this.loading = false
         })
+        .catch(error => {
+        	this.loading = false
+          this.error = true
+          this.errorText = error.response.data.status_message
+        })
     },
     getIntiialMovies () {
       for (let thisMovie of this.allMovies) {
@@ -89,29 +106,29 @@ export default {
       }
     },
     reFilter: function (value) {
-    	this.selectedGenres = value
-      this.error = false
+      this.selectedGenres = value
+      this.movieError = false
       let movies = this.allMovies
       var theResult = movies.filter(x => x.genre_ids.some(g => value.includes(g)))
       this.showMovies = theResult
       if (theResult.length > 0) {
         return theResult
       } else {
-        this.error = true
-        this.errorText = "No movies to Show"
+        this.movieError = true
+        this.movieErrorText = "No movies to Show"
       }
     },
     changeRating: function (value) {
-    	this.rating = value
-      this.error = false
+      this.rating = value
+      this.movieError = false
       let movies = this.allMovies
       var theResult = movies.filter(x => x.vote_average > value)
       this.showMovies = theResult
       if (theResult.length > 0) {
        return theResult
      } else {
-      this.error = true
-      this.errorText = "No movies to Show"
+        this.movieError = true
+        this.movieErrorText = "No movies to Show"
      }
     }
   },

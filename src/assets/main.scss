@@ -1,4 +1,20 @@
 /* main.scss */
+@mixin for-phone-only {
+  @media (max-width: 599px) { @content; }
+}
+@mixin for-tablet-portrait-up {
+  @media (min-width: 600px) { @content; }
+}
+@mixin for-tablet-landscape-up {
+  @media (min-width: 900px) { @content; }
+}
+@mixin for-desktop-up {
+  @media (min-width: 1200px) { @content; }
+}
+@mixin for-big-desktop-up {
+  @media (min-width: 1800px) { @content; }
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -6,7 +22,7 @@
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-  margin: 60px auto;
+  margin: 14px auto 60px auto;
   /* Loading Spinner */
   .home {
     .loading {
@@ -96,41 +112,57 @@
       }
     }
   }
-  // .results {
-  //   .grid-item {
-  //     border: 1px solid gainsboro;
-  //     width: 18%;
-  //     display: inline-block;
-  //     margin: 4px;
-  //     float: left;
-  //     .movie {
-  //       .image {
-  //         img {
-  //           width: 100%;
-  //         }
-  //       }
-  //       .info {
-  //         .title {
-
-  //         }
-  //         .genre {
-  //           display: inline-block;
-  //           padding: 4px;
-  //         }
-  //       }
-  //     }
-  //   }
   .results {
     .grid-container {
       display: grid;
-      grid-template-columns: auto auto auto auto;
+      @include for-phone-only {
+        grid-template-columns: auto;
+      }
+      @include for-tablet-portrait-up {
+        grid-template-columns: auto auto;
+      }
+      @include for-desktop-up {
+        grid-template-columns: auto auto auto auto;
+      }
       padding: 10px;
       .grid-item {
         background-color: rgba(255, 255, 255, 0.8);
-        border: 1px solid rgba(0, 0, 0, 0.8);
         padding: 20px;
         font-size: 30px;
         text-align: center;
+          @include for-phone-only {
+            border: 1px solid #ccc;
+            border-top-width: 0px;
+            border-left-width: 1px;
+            &:nth-of-type(1) {
+              border-top-width: 1px;
+            }
+          }
+          @include for-tablet-portrait-up {
+            border: 1px solid #ccc;
+            border-top-width: 0px;
+            border-left-width: 0px;
+            &:nth-child(-n+2) {
+              border-top-width: 1px
+            }
+            &:nth-child(2n+1){
+              border-left-width: 1px;
+            }
+          }
+          @include for-desktop-up {
+            border: 1px solid #ccc;
+            border-top-width: 0px;
+            border-left-width: 0px;
+            &:nth-child(2n+1){
+              border-left-width: 0px;
+            }
+            &:nth-child(-n+4) {
+              border-top-width: 1px;
+            }
+            &:nth-child(4n-7) {
+              border-left-width: 1px;
+            }
+        }
         .movie {
           .image {
             img {
@@ -139,11 +171,19 @@
           }
           .info {
             .title {
-
+              font-size: 22px;
             }
-            .genre {
-              display: inline-block;
-              padding: 4px;
+            .genres {
+              .genre{
+                font-size: 12px;
+                display: inline-block;
+                padding: 4px 10px;
+                background-color: #eee;
+                -webkit-border-radius: 6px;
+                -moz-border-radius: 6px;
+                border-radius: 6px;
+                margin: 10px;
+              }
             }
           }
         }
@@ -158,4 +198,76 @@
   		border: 1px solid #f5c6cb;
   	}
   }
+  .ratings {
+    .rating {
+      font-size: 14px;
+      select{
+        font-size: 14px;
+      }
+    }
+  }
+  .filters {
+    .form-check {
+      display: inline-block;
+      width: 200px;
+      margin: 4px;
+      border: 1px solid #dcdcdc;
+    }
+    .checkItem {
+      display: inline-block;
+      width: 130px;
+      text-align: left;
+      padding: 10px;
+        .checkContainer {
+          display: block;
+          position: relative;
+          padding-left: 35px;
+          margin-bottom: 12px;
+          cursor: pointer;
+          font-size: 14px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+          }
+          .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 18px;
+            width: 18px;
+            background-color: #eee;
+            &:after {
+              content: "";
+              position: absolute;
+              display: none;
+              left: 6px;
+              top: 0px;
+              width: 5px;
+              height: 10px;
+              border: solid white;
+              border-width: 0 3px 3px 0;
+              -webkit-transform: rotate(45deg);
+              -ms-transform: rotate(45deg);
+              transform: rotate(45deg);
+            }
+          }
+          &:hover input ~ .checkmark {
+            background-color: #ccc;
+          }
+          input:checked ~ .checkmark {
+            background-color: #2196F3;
+          }
+          input:checked ~ .checkmark:after {
+            display: block;
+          }
+        }
+      }
+    }
 }
