@@ -18,6 +18,7 @@ export default {
     return {
       defaultGenres: [],
       selectedGenres: [],
+      filteredData: [],
       ratingMin: 0,
       ratingMax: 10,
       lowestRating: 3

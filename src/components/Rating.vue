@@ -2,7 +2,7 @@
   <div class="results">
     <!-- ADD V FOR HERE -->
     <div class="form-select">
-    	<select v-model="lowestRating"  v-on:change="changeRating">
+      <select v-model="lowestRating"  v-on:change="changeRating">
         <option disabled value="">Please select one</option>
         <option>0</option>
         <option>0.5</option>
@@ -43,8 +43,9 @@ export default {
   },
   computed: {
     changeRating: function () {
-      this.$emit('clicked', this.lowestRating)
-      return this.lowestRating
+      var pointNum = parseFloat(this.lowestRating);
+      this.$emit('ratingChanged', pointNum)
+      return pointNum
     }
   }
 }
@@ -52,9 +53,9 @@ export default {
 
 <style scoped lang="scss">
 .form-check {
-	display: inline-block;
-	width: 200px;
-	margin: 4px;
-	border: 1px solid gainsboro;
+  display: inline-block;
+  width: 200px;
+  margin: 4px;
+  border: 1px solid gainsboro;
 }
 </style>

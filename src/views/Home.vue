@@ -1,11 +1,25 @@
 <template>
   <div class="home">
-    <div v-if="loading === true">
+    <div v-if="loading === true" class="loading">
+      <div class="fingerprint-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
       <h3>Loading</h3>
     </div>
     <div v-else>
-      <Rating :filters="this.getAvailableFilters"  @clicked="changeRating" />
+      <Rating :filters="this.getAvailableFilters"  @ratingChanged="changeRating" />
       <Filters :filters="this.getAvailableFilters"  @clicked="reFilter" />
+      <div v-if="error" class="showError">
+        <p>{{ this.errorText }}</p>
+      </div>
       <Movies :results="this.showFilteredMovies" :rating="this.rating" />
     </div>
   </div>
@@ -75,14 +89,30 @@ export default {
       }
     },
     reFilter: function (value) {
+    	this.selectedGenres = value
+      this.error = false
       let movies = this.allMovies
-      this.selectedGenres = value
       var theResult = movies.filter(x => x.genre_ids.some(g => value.includes(g)))
       this.showMovies = theResult
-      return theResult
+      if (theResult.length > 0) {
+        return theResult
+      } else {
+        this.error = true
+        this.errorText = "No movies to Show"
+      }
     },
     changeRating: function (value) {
-      this.rating = value
+    	this.rating = value
+      this.error = false
+      let movies = this.allMovies
+      var theResult = movies.filter(x => x.vote_average > value)
+      this.showMovies = theResult
+      if (theResult.length > 0) {
+       return theResult
+     } else {
+      this.error = true
+      this.errorText = "No movies to Show"
+     }
     }
   },
   computed: {
